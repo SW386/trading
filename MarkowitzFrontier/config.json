@@ -1,0 +1,8 @@
+{
+    "tickers" : ["NOVN", "ZOM", "AMTX", "EOLS"],
+    "start" : "01-20-2019", 
+    "end" : "01-20-2021",
+    "capital" : 1000,
+    "simulations" : 50000,
+    "intervals" : 100
+}
