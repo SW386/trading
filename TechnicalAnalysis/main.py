@@ -27,8 +27,6 @@ def analyze_nasdaq(start, end, sentiment_days=365, difference=0.05, threshold=0.
     negative_sentiments = []
     percent_profits = []
     
-    
-    
     for index, symbol in enumerate(symbols):
         
         #Sleep so we dont timeout yfinance API
@@ -40,10 +38,6 @@ def analyze_nasdaq(start, end, sentiment_days=365, difference=0.05, threshold=0.
         #Analyze an ticker if analysts have an opinion
         if ticker.recommendations and ticker.recommendations[prev:]:
             
-            technicals = support_and_resistance(ticker, start, end)
-            
-            
-            analyzed_symbols.append(symbol)
             recommendations = ticker.recommendations["To Grade"]
             analyst_sentiment = sentiment(recommendations)
             
@@ -53,10 +47,10 @@ def analyze_nasdaq(start, end, sentiment_days=365, difference=0.05, threshold=0.
                 resistance = technicals["Resistance"]
                 support = technicals["Support"]
                 price = ticker.history().tail(1)["Close"].iloc[0]
+                percent_profit = abs(resistance-price)/price
                 
                 sufficient_diff = abs(resistance-support)/price > difference
                 within_threshold = abs(price-support)/price < threshold
-                percent_profit = abs(resistance-price)/price
                             
                 if sufficient_diff and within_threshold:
                     
