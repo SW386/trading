@@ -7,15 +7,8 @@ Created on Sat Jan  9 17:44:14 2021
 """
 
 import yfinance as yf
-import matplotlib.pyplot as plt
-import pandas as pd
-import numpy as np
-import json
-import sys
 from datetime import datetime, timedelta
-from collections import defaultdict
 from sklearn.cluster import KMeans
-from tqdm import tqdm
 
 BUY = set(["buy", "overweight", "outperform", "overperform", "overperformer", "accumulate", "add", "positive"])
 HOLD = set(["hold", "equal-weight", "perform", "neutral", "in-line", "sector", "market", "mixed", "average", "fair"])
@@ -76,19 +69,19 @@ def sentiment(recommendations):
     
     return data
 
-def support_and_resistance(symbol, start, end, interval):
+def support_and_resistance(ticker, start, end, interval="1h"):
     """ Calculate Mean Resistance and Support as well as Max and Min Price
     
     Parameters
     ----------
-    symbol : String
-        Ticker Symbol
+    ticker : Ticker
+        yfinance Ticker Object
     start : Datetime
         Start Date
     end : Datetime
         End Date
-    interval : String
-        yfinance code for intervals
+    interval : String, optional
+        yfinance code for intervals. Defaults to 1 hour
         
 
     Returns
@@ -98,8 +91,9 @@ def support_and_resistance(symbol, start, end, interval):
 
     """
     
-    ticker = yf.Ticker(symbol)
-    data = ticker.history(interval = "1h", start = start, end = end)
+    print(ticker)
+    
+    data = ticker.history(interval = interval, start = start, end = end)
     supports = kmeans_clustering(data["Low"])
     resistances = kmeans_clustering(data["High"])
     
